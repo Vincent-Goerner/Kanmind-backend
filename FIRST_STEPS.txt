@@ -1,0 +1,8 @@
+
+	1. GitHub Repository anlegen
+
+	2. Projekt starten (siehe Projektumgebung_in_Python)
+
+	3. App starten (siehe Projektumgebung_in_Python) und mit Projekt verknüpfen
+
+	4. Pakete installieren und requierements.txt erstellen
