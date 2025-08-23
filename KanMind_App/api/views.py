@@ -1,2 +1,9 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from KanMind_App.models import Board
+from KanMind_App.api.serializers import BoardSerializer
+# from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+
+
+class BoardList(generics.ListCreateAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
