@@ -7,9 +7,12 @@ class Member(models.Model):
     joined_date = models.DateField(auto_now_add=True)
 
 class Board(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=50)
     members = models.ManyToManyField(Member, related_name="boards")
     owner = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
 
 class Column(models.Model):
     name = models.CharField(max_length=50)
