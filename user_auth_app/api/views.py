@@ -3,10 +3,10 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authtoken.models import Token
-from user_auth_app.models import UserProfile
-from .serializers import UserProfileSerializer, RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework.authtoken.views import ObtainAuthToken
+from user_auth_app.models import UserProfile
+from .serializers import UserProfileSerializer, RegistrationSerializer
 
 class UserProfileList(generics.ListCreateAPIView):
     queryset = UserProfile.objects.all()

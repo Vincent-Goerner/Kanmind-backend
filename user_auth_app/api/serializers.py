@@ -8,7 +8,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['user', 'bio', 'location']
 
 class RegistrationSerializer(serializers.ModelSerializer):
-
     repeated_password = serializers.CharField(write_only=True)
 
     class Meta:
