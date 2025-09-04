@@ -25,7 +25,7 @@ class Member(models.Model):
 class Board(models.Model):
     title = models.CharField(max_length=50)
     members = models.ManyToManyField(Member, related_name="board_members")
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
