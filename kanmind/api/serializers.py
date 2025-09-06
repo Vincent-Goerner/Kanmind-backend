@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from KanMind_App.models import User, Board, Task, Comment
+from kanmind.models import User, Board, Task, Comment
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,11 +20,11 @@ class BoardSerializer(serializers.ModelSerializer):
         write_only=True,
         source='members'
     )
-    owner = UserSerializer(read_only=True)
+    owner_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Board
-        fields = ['id', 'title', 'member_count', 'ticket_count', 'tasks_to_do_count', 'tasks_high_prio_count', 'owner', 'members', 'member_ids']
+        fields = ['id', 'title', 'member_count', 'ticket_count', 'tasks_to_do_count', 'tasks_high_prio_count', 'owner_id', 'members', 'member_ids']
 
     def get_member_count(self, obj):
         return obj.members.count()

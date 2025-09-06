@@ -25,7 +25,7 @@ class Member(models.Model):
 class Board(models.Model):
     title = models.CharField(max_length=50)
     members = models.ManyToManyField(Member, related_name="board_members")
-    owner = models.ForeignKey(Member, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -36,8 +36,8 @@ class Task(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_SELECTION, default='to-do')
     priority = models.CharField(max_length=10, choices=PRIORITY_SELECTION, default='medium')
-    assignee_id = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
-    reviewer_id = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
+    assignee_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
+    reviewer_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
     due_date = models.DateField(editable=True)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
 
@@ -46,7 +46,7 @@ class Task(models.Model):
 
 class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    author = models.ForeignKey(Member, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     created = models.DateTimeField(auto_now_add=True)
 

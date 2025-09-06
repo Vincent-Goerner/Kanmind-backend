@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class KanmindAppConfig(AppConfig):
+class KanmindConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'KanMind_App'
+    name = 'kanmind'
