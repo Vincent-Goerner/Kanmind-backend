@@ -1,6 +1,6 @@
 const GUEST_LOGIN = {
-    "username": "Vincent",
-    "password": "6df_3+s#IA06.*szw13"
+    "username": "Guest",
+    "password": "903uri3292"
 }
 
 const API_BASE_URL = 'http://127.0.0.1:8000/api/';

@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
-        fields = ['user', 'bio', 'location']
+        model = User
+        fields = ['id', 'email', 'username']
 
 class RegistrationSerializer(serializers.ModelSerializer):
     repeated_password = serializers.CharField(write_only=True)

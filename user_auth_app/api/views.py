@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authtoken.models import Token
@@ -32,9 +31,10 @@ class RegistrationView(APIView):
                 'token': token.key,
                 'username': saved_account.username,
                 'email': saved_account.email,
+                'user_id': saved_account.id
             }
         else:
-            data = serializer.errors
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data)
     
@@ -51,7 +51,8 @@ class CustomLoginView(ObtainAuthToken):
             data = {
                 'token': token.key,
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                'user_id': user.id
             }
         else:
             data = serializer.errors
