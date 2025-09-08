@@ -33,10 +33,10 @@ class RegistrationView(APIView):
                 'email': saved_account.email,
                 'user_id': saved_account.id
             }
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(data)
+            return Response({'201': 'Der Benutzer wurde erfolgreich erstellt.', 'data': data}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'400': 'Ungültige Anfragedaten.', 'Error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
     
 class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
@@ -54,7 +54,7 @@ class CustomLoginView(ObtainAuthToken):
                 'email': user.email,
                 'user_id': user.id
             }
-        else:
-            data = serializer.errors
 
-        return Response(data)
+            return Response({'200': 'Erfolgreiche Anmeldung.', 'data': data}, status=status.HTTP_200_OK)
+        else:
+            return Response({'400': 'Ungültige Anfragedaten.', 'Error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
