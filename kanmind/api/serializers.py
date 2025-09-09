@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from kanmind.models import User, Board, Task, Comment
+from kanmind.models import Board, Task, Comment
+from django.contrib.auth.models import User
 from user_auth_app.api.serializers import UserProfileSerializer
 
 
