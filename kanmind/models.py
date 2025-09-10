@@ -40,7 +40,7 @@ class Task(models.Model):
     assignee_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
     reviewer_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
     due_date = models.DateField(editable=True, default=date.today())
-    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
+    creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
 
     def __str__(self):
         return self.title

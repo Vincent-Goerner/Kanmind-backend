@@ -52,6 +52,6 @@ class IsBoardMember(BasePermission):
             return False
         
         if request.method == "DELETE":
-            return bool(request.user == board.owner or request.user == task.owner)
+            return bool(request.user == board.owner or request.user == task.creator)
         
         return bool(request.user == board.owner or request.user in board.members.all())
