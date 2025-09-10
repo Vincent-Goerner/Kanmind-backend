@@ -2,8 +2,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from kanmind.models import Board, Task
-from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer
-from kanmind.api.permissions import IsOwnerOrMember
+from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, TaskDetailSerializer
+from kanmind.api.permissions import IsOwnerOrMember, IsBoardMember
 from django.contrib.auth.models import User
 from user_auth_app.api.serializers import UserProfileSerializer
 
@@ -36,4 +36,25 @@ class EmailCheck(generics.RetrieveAPIView):
 class TaskList(generics.CreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    permission_classes = [IsBoardMember]
+
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskDetailSerializer
+    permission_classes = [IsBoardMember]
+
+class TaskListAssigned(generics.ListAPIView):
+    serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(assignee_id=user)
+    
+class TaskListReviewing(generics.ListAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Task.objects.filter(reviewer_id=user)

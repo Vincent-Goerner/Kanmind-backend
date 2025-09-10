@@ -59,10 +59,14 @@ class BoardDetailSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     owner_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    comments_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
-        fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'owner_id']
+        fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'reviewer_id', 'due_date', 'comments_count', 'owner_id']
+
+    def get_comments_count(self, obj):
+        return obj.comments.count()
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -70,6 +74,11 @@ class TaskSerializer(serializers.ModelSerializer):
         task = Task.objects.create(owner=owner, **validated_data)
 
         return task
+    
+class TaskDetailSerializer(TaskSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'reviewer_id', 'due_date', 'owner_id']
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
