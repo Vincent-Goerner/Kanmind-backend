@@ -58,9 +58,18 @@ class BoardDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'owner_id', 'members', 'member_ids', 'tasks']
 
 class TaskSerializer(serializers.ModelSerializer):
+    owner_id = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Task
-        fields = ['id', 'title', 'board', 'description', 'status', 'priority']
+        fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'owner_id']
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        owner = request.user if request else None
+        task = Task.objects.create(owner=owner, **validated_data)
+
+        return task
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -33,7 +33,7 @@ class EmailCheck(generics.RetrieveAPIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
-class TaskList(generics.ListCreateAPIView):
+class TaskList(generics.CreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated]

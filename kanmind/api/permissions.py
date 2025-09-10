@@ -9,7 +9,7 @@ class IsOwnerOrMember(IsAuthenticated):
         try:
             board = obj
         except Board.DoesNotExist:
-            raise NotFound("Board does not exist")  
+            raise NotFound("Board does not exist")
         if request.method in SAFE_METHODS:
             return True
         elif request.method == 'DELETE':

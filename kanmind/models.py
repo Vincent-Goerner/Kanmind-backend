@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 
 
 STATUS_SELECTION=(
-    ('to-do','To Do'),
-    ('in-progress','In Progress'),
+    ('todo','To Do'),
+    ('in_progress','In Progress'),
     ('review','Review'),
     ('done','Done')
 )
@@ -38,8 +39,8 @@ class Task(models.Model):
     priority = models.CharField(max_length=10, choices=PRIORITY_SELECTION, default='medium')
     assignee_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
     reviewer_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
-    due_date = models.DateField(editable=True)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
+    due_date = models.DateField(editable=True, default=date.today())
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
 
     def __str__(self):
         return self.title
