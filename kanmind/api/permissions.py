@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission,IsAuthenticated , SAFE_METHODS
-from kanmind.models import Board, Task
+from kanmind.models import Board, Task, Comment
 from rest_framework.exceptions import NotFound
 
 class IsOwnerOrMember(IsAuthenticated):
@@ -55,3 +55,17 @@ class IsBoardMember(BasePermission):
             return bool(request.user == board.owner or request.user == task.creator)
         
         return bool(request.user == board.owner or request.user in board.members.all())
+    
+class IsCommentAuthor(BasePermission):
+    def has_permission(self, request, view):
+        try:
+            comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
+        except Comment.DoesNotExist:
+            raise NotFound("Kommentar nicht gefunden")
+        if comment:
+            return bool(request.user == comment.author)
+    
+    def has_object_permission(self, request, view, obj):
+        comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
+        if request.method == "DELETE":
+            return bool(request.user == comment.author )

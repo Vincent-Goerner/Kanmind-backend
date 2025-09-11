@@ -81,6 +81,8 @@ class TaskDetailSerializer(TaskSerializer):
         fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'reviewer_id', 'due_date', 'creator_id']
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Comment
-        fields = ['id', 'task', 'owner', 'text', 'created']
+        fields = ['id', 'created_at', 'author', 'content']
