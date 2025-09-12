@@ -73,7 +73,7 @@ class CommentCreateView(generics.CreateAPIView):
         return Comment.objects.filter(task__id=self.kwargs.get("pk"))
     
 class CommentDeleteView(generics.DestroyAPIView):
-    # queryset = Task.objects.all()
+    queryset = Task.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsCommentAuthor]
 
@@ -81,6 +81,3 @@ class CommentDeleteView(generics.DestroyAPIView):
         task_id = int(self.kwargs.get('pk'))
         comment_id = int(self.kwargs.get('comment_id'))
         return Comment.objects.get(pk=comment_id, task__id=task_id)
-    
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)

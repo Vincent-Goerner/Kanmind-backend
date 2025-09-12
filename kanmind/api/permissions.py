@@ -61,11 +61,11 @@ class IsCommentAuthor(BasePermission):
         try:
             comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
         except Comment.DoesNotExist:
-            raise NotFound("Kommentar nicht gefunden")
+            raise NotFound("Comment not found")
         if comment:
             return bool(request.user == comment.author)
     
     def has_object_permission(self, request, view, obj):
         comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
         if request.method == "DELETE":
-            return bool(request.user == comment.author )
+            return bool(request.user == comment.author)
