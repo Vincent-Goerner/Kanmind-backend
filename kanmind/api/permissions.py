@@ -2,7 +2,7 @@ from rest_framework.permissions import BasePermission,IsAuthenticated , SAFE_MET
 from kanmind.models import Board, Task, Comment
 from rest_framework.exceptions import NotFound
 
-class IsOwnerOrMember(IsAuthenticated):
+class IsOwnerOrMember(BasePermission):
 
     def has_permission(self, request, view):
         user = request.user

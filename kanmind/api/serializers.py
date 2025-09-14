@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from user_auth_app.api.serializers import UserProfileSerializer
 
 
+def get_full_username(user):
+    return f'{user.username} {user.last_name}'.strip()
+
 class BoardSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
@@ -81,8 +84,11 @@ class TaskDetailSerializer(TaskSerializer):
         fields = ['id', 'board', 'title', 'description', 'status', 'priority', 'assignee_id', 'reviewer_id', 'due_date', 'creator_id']
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
+    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
         fields = ['id', 'created_at', 'author', 'content']
+        
+    def get_author(self, obj):
+        return get_full_username(obj.author)

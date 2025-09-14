@@ -2,17 +2,24 @@ from rest_framework import serializers
 from user_auth_app.models import UserProfile
 from django.contrib.auth.models import User
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    fullname = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['id', 'email', 'username']
+        fields = ['id', 'email', 'fullname']
+        
+    def get_fullname(self, obj:User):
+        return f'{obj.username} {obj.last_name}'.strip()
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    fullname = serializers.CharField(write_only=True)
     repeated_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'repeated_password']
+        fields = ['fullname', 'email', 'password', 'repeated_password']
         extra_kwargs = {
             'password': {
                 'write_only': True
@@ -25,9 +32,20 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def save(self):
+        fullname = self.validated_data['fullname']
         pw = self.validated_data['password']
         repeated_pw = self.validated_data['repeated_password']
-        account = User(email=self.validated_data['email'], username=self.validated_data['username'])
+
+        name_parts = fullname.strip().split()
+
+        username = name_parts[0]
+        last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
+
+        account = User(
+            email=self.validated_data['email'], 
+            username=username, 
+            last_name=last_name
+        )
 
         if pw != repeated_pw:
             raise serializers.ValidationError({'error': 'passwords dont match'})
