@@ -73,7 +73,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get("request")
-        creator = request.user if request else None
+        creator = request.user
         task = Task.objects.create(creator=creator, **validated_data)
 
         return task

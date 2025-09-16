@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -52,3 +53,23 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.set_password(pw)
         account.save()
         return account
+    
+class LoginTokenSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, payload):
+        payload_email = payload.get('email')
+        payload_password = payload.get('password')
+
+        try:
+            user = User.objects.get(email=payload_email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("Email or password is not match")
+
+        user = authenticate(username=user.username, password=payload_password)
+        if not user:
+            raise serializers.ValidationError("Email or password is not match")
+
+        payload['user'] = user
+        return payload
