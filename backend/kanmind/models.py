@@ -4,8 +4,8 @@ from datetime import date
 
 
 STATUS_SELECTION=(
-    ('todo','To Do'),
-    ('in_progress','In Progress'),
+    ('to-do','To Do'),
+    ('in-progress','In Progress'),
     ('review','Review'),
     ('done','Done')
 )

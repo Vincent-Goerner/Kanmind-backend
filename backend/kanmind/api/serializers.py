@@ -17,7 +17,8 @@ class BoardSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
         many=True,
         write_only=True,
-        source='members'
+        source='members',
+        required=False
     )
     owner_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
@@ -32,7 +33,7 @@ class BoardSerializer(serializers.ModelSerializer):
         return obj.tasks.count()
     
     def get_tasks_to_do_count(self, obj):
-        return obj.tasks.filter(status='to_do').count()
+        return obj.tasks.filter(status='to-do').count()
     
     def get_tasks_high_prio_count(self, obj):
         return obj.tasks.filter(priority='high').count()
@@ -40,26 +41,13 @@ class BoardSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         members = validated_data.pop("members", [])
         request = self.context.get("request")
-        owner = request.user if request else None
+        owner = request.user
 
         board = Board.objects.create(owner=owner, **validated_data)
 
         board.members.set(members)
         return board
     
-class BoardDetailSerializer(serializers.ModelSerializer):
-    members = UserProfileSerializer(many=True, read_only=True)
-    member_ids = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        many=True,
-        write_only=True,
-        source='members'
-    )
-
-    class Meta:
-        model = Board
-        fields = ['id', 'title', 'owner_id', 'members', 'member_ids', 'tasks']
-
 class TaskSerializer(serializers.ModelSerializer):
     creator_id = serializers.PrimaryKeyRelatedField(read_only=True)
     comments_count = serializers.SerializerMethodField()
@@ -77,6 +65,26 @@ class TaskSerializer(serializers.ModelSerializer):
         task = Task.objects.create(creator=creator, **validated_data)
 
         return task
+    
+class BoardDetailSerializer(BoardSerializer):
+    tasks = TaskSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Board
+        fields = ['id', 'title', 'tasks', 'members']
+
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        request = self.context.get('request')
+        
+        if request.method == "PATCH":
+            rep['owner_data']= UserProfileSerializer(instance.owner).data
+            rep['members_data'] = UserProfileSerializer(instance.members.all(), many=True).data
+            rep.pop('members',None)
+        else:
+           rep['owner_id']=instance.owner_id 
+           rep['members'] = UserProfileSerializer(instance.members.all(), many=True).data
+        return rep
     
 class TaskDetailSerializer(TaskSerializer):
     class Meta:

@@ -17,6 +17,11 @@ class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardDetailSerializer
     permission_classes = [IsOwnerOrMember]
+    
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class EmailCheckView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
@@ -25,7 +30,7 @@ class EmailCheckView(generics.RetrieveAPIView):
         check_email = request.query_params.get('email')
 
         if not check_email:
-            return Response({'error': 'no valid email'} ,status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'No valid email'} ,status=status.HTTP_400_BAD_REQUEST)
 
         try:
             user = User.objects.get(email=check_email)
