@@ -13,6 +13,18 @@ class BoardListView(generics.ListCreateAPIView):
     serializer_class = BoardSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        boards = Board.objects.filter(members=user) | Board.objects.filter(owner=user)
+
+        return boards.distinct()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardDetailSerializer
