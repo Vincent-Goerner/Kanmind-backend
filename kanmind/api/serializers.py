@@ -72,6 +72,7 @@ class BoardDetailSerializer(BoardSerializer):
     class Meta:
         model = Board
         fields = ['id', 'title', 'tasks', 'members']
+        write_only_fields = ['members']
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)

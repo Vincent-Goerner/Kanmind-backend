@@ -4,7 +4,6 @@ from rest_framework.permissions import IsAuthenticated
 from kanmind.models import Board, Task, Comment
 from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, TaskDetailSerializer, CommentSerializer
 from kanmind.api.permissions import IsOwnerOrMember, IsBoardMember, IsCommentAuthor
-from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from user_auth_app.api.serializers import UserProfileSerializer
 
@@ -34,22 +33,6 @@ class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-class EmailCheckView(generics.RetrieveAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        check_email = request.query_params.get('email')
-
-        if not check_email:
-            return Response({'error': 'No valid email'} ,status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            user = User.objects.get(email=check_email)
-            user_data = UserProfileSerializer(user).data
-            return Response(user_data)
-        except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         
 class TaskListView(generics.CreateAPIView):
     queryset = Task.objects.all()

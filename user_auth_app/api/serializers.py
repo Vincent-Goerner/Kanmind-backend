@@ -8,9 +8,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'fullname', 'email']
-        
-    def get_fullname(self, obj:User):
+        fields = ["id","email","fullname"]
+
+    def get_fullname(self, obj:User)->str:
         return f'{obj.username} {obj.last_name}'.strip()
 
 class RegistrationSerializer(serializers.ModelSerializer):
