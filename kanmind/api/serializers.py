@@ -2,29 +2,47 @@ from rest_framework import serializers
 from kanmind.models import Board, Task, Comment
 from django.contrib.auth.models import User
 from user_auth_app.api.serializers import UserProfileSerializer
+from rest_framework.request import Request
 
 
 def get_full_username(user):
     return f'{user.username} {user.last_name}'.strip()
+
+class MembersField(serializers.Field):
+    
+    def to_representation(self, value:User):
+        return UserProfileSerializer(value.all(), many=True).data
+    
+    def to_internal_value(self, data):
+        users=[]
+        for pk in data:
+            try:
+                user = User.objects.get(pk=pk)
+                users.append(user)
+            except User.DoesNotExist:
+                raise serializers.ValidationError(f"User dont exist")
+        return users
 
 class BoardSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
     tasks_to_do_count = serializers.SerializerMethodField()
     tasks_high_prio_count = serializers.SerializerMethodField()
-    members = UserProfileSerializer(many=True, read_only=True)
-    member_ids = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(),
-        many=True,
-        write_only=True,
-        source='members',
-        required=False
-    )
+    members = MembersField()
     owner_id = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Board
-        fields = ['id', 'title', 'member_count', 'ticket_count', 'tasks_to_do_count', 'tasks_high_prio_count', 'members', 'member_ids', 'owner_id']
+        fields = [
+            'id',
+            'title',
+            'members',
+            'member_count',
+            'ticket_count',
+            'tasks_to_do_count',
+            'tasks_high_prio_count',
+            'owner_id',
+        ]
 
     def get_member_count(self, obj):
         return obj.members.count()
@@ -71,20 +89,19 @@ class BoardDetailSerializer(BoardSerializer):
 
     class Meta:
         model = Board
-        fields = ['id', 'title', 'tasks', 'members']
+        fields = ['id', 'title', 'members', 'tasks']
         write_only_fields = ['members']
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        request = self.context.get('request')
-        
-        if request.method == "PATCH":
-            rep['owner_data']= UserProfileSerializer(instance.owner).data
-            rep['members_data'] = UserProfileSerializer(instance.members.all(), many=True).data
-            rep.pop('members',None)
+        request: Request = self.context.get("request")
+        if request and request.method == "PATCH":
+            rep["owner_data"] = UserProfileSerializer(instance.owner).data
+            rep["members_data"] = UserProfileSerializer(instance.members.all(), many=True).data
+            rep.pop("members", None)
         else:
-           rep['owner_id']=instance.owner_id 
-           rep['members'] = UserProfileSerializer(instance.members.all(), many=True).data
+            rep["owner_id"] = instance.owner_id
+            rep["members"] = UserProfileSerializer(instance.members.all(), many=True).data
         return rep
     
 class TaskDetailSerializer(TaskSerializer):

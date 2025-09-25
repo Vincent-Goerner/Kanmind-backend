@@ -11,7 +11,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ["id","email","fullname"]
 
     def get_fullname(self, obj:User)->str:
-        return f'{obj.username} {obj.last_name}'.strip()
+        fullname = obj.username + " " + obj.last_name
+        return fullname
 
 class RegistrationSerializer(serializers.ModelSerializer):
     fullname = serializers.CharField(write_only=True)

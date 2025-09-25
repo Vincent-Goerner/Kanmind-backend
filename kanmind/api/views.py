@@ -5,7 +5,6 @@ from kanmind.models import Board, Task, Comment
 from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, TaskDetailSerializer, CommentSerializer
 from kanmind.api.permissions import IsOwnerOrMember, IsBoardMember, IsCommentAuthor
 from django.shortcuts import get_object_or_404
-from user_auth_app.api.serializers import UserProfileSerializer
 
 class BoardListView(generics.ListCreateAPIView):
     queryset = Board.objects.all()
