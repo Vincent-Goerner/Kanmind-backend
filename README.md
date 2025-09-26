@@ -12,8 +12,6 @@ Create or choose an empty folder and open it in your preferred code editor or co
 python -m venv env
 env\Scripts\activate
 
-## Hinweis
-
-Dieses Projekt ist **ausschließlich für Schüler der Developer Akademie** gedacht und nicht zur freien Nutzung oder Weitergabe freigegeben.
-
----
+**Note**  
+> This project is intended exclusively for students of the Developer Akademie.  
+> It is not licensed for public use or distribution.
