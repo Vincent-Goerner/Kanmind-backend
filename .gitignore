@@ -1,4 +1,2 @@
 # Ignore SQLite database files
-*.sqlite3
-*.db
-SQL3.db
+db.sqlite3
