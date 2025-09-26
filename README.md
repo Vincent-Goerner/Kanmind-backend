@@ -2,17 +2,14 @@
 
 ## Getting Started
 
-# 1. Functionality
-User authentication: Management of user accounts and authentication. Task management: Creation, editing and deletion of tasks. API interfaces: Provision of RESTful APIs for interaction with the front end.
+# Installation & Setup
 
-# 2. Installation & Setup
-
-## clone respository
+## 1. clone respository
 
 git clone git@github.com:Vincent-Goerner/Kanmind-backend.git
 cd Kanmind-backend
 
-## create and activate venv
+## 2. create and activate venv
 
 python3 -m venv env
 
@@ -22,18 +19,18 @@ source env/bin/activate
 ### Windows: 
 env\Scripts\activate
 
-## install dependencies
+## 3. install dependencies
 
 pip install -r requirements.txt
 
-## migrate database
+## 4. migrate database
 python manage.py migrate
 
-## create superuser
+## 5. create superuser
 
 python manage.py createsuperuser
 
-## start server
+## 6. start server
 
 python manage.py runserver
 
