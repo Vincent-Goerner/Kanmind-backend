@@ -2,31 +2,42 @@
 
 ## Getting Started
 
-### 1. Prepare the project folder
-Create or choose an empty folder and open it in your preferred code editor or command line interface (CLI).
+# 1. Functionality
+User authentication: Management of user accounts and authentication. Task management: Creation, editing and deletion of tasks. API interfaces: Provision of RESTful APIs for interaction with the front end.
 
-### 2. Create and activate a virtual environment
+# 2. Installation & Setup
 
-#### Windows (Command Prompt)
+## clone respository
 
-python -m venv env
-source env/Scripts/activate
+git clone git@github.com:Vincent-Goerner/Kanmind-backend.git
+cd Kanmind-backend
 
-### Unix / macOS (bash, zsh)
+## create and activate venv
 
 python3 -m venv env
-source env/bin/activate
 
-### Git Bash (on Windows)
+### Mac and Linux:
+source env/bin/activate  
 
-python -m venv env
-source env/Scripts/activate
+### Windows: 
+env\Scripts\activate
 
-### 3. Install project dependencies
-
-Make sure your virtual environment is activated, then run:
+## install dependencies
 
 pip install -r requirements.txt
+
+## migrate database
+python manage.py migrate
+
+## create superuser
+
+python manage.py createsuperuser
+
+## start server
+
+python manage.py runserver
+
+### app is now reachable with http://127.0.0.1:8000/
 
 **Note**  
 > This project is intended exclusively for students of the Developer Akademie.  

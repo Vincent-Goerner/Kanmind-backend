@@ -1,5 +1,5 @@
 """
-URL configuration for KanMind_Hub project.
+URL configuration for kanmind_main project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -23,3 +23,4 @@ urlpatterns = [
     path('api/', include('user_auth_app.api.urls')),
     path('api-auth', include('rest_framework.urls')),
 ]
+
