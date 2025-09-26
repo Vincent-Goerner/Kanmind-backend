@@ -37,8 +37,8 @@ class Task(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_SELECTION, default='to-do')
     priority = models.CharField(max_length=10, choices=PRIORITY_SELECTION, default='medium')
-    assignee_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
-    reviewer_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
+    assignee = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_assignees")
+    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="task_reviewer")
     due_date = models.DateField(editable=True, default=date.today())
     creator = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='task_creator')
 

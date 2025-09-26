@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from kanmind.models import Board, Task, Comment
-from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, TaskDetailSerializer, CommentSerializer
+from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, CommentSerializer
 from kanmind.api.permissions import IsOwnerOrMember, IsBoardMember, IsCommentAuthor
 from django.shortcuts import get_object_or_404
 
@@ -33,15 +33,18 @@ class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
-class TaskListView(generics.CreateAPIView):
+class TaskListView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = [IsBoardMember]
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
-    serializer_class = TaskDetailSerializer
+    serializer_class = TaskSerializer
     permission_classes = [IsBoardMember]
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 class TaskListAssignedView(generics.ListAPIView):
     serializer_class = TaskSerializer
@@ -59,7 +62,7 @@ class TaskListReviewingView(generics.ListAPIView):
         user = self.request.user
         return Task.objects.filter(reviewer_id=user)
     
-class CommentCreateView(generics.CreateAPIView):
+class CommentCreateView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [IsBoardMember]
 
