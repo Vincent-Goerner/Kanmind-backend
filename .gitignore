@@ -1,2 +1,5 @@
-# Ignore SQLite database files
-db.sqlite3
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
