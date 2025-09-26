@@ -2,10 +2,10 @@
 
 ## Getting Started
 
-### 1. Functionality
+# 1. Functionality
 User authentication: Management of user accounts and authentication. Task management: Creation, editing and deletion of tasks. API interfaces: Provision of RESTful APIs for interaction with the front end.
 
-### 2. Installation & Setup
+# 2. Installation & Setup
 
 ## clone respository
 
@@ -16,10 +16,10 @@ cd Kanmind-backend
 
 python3 -m venv env
 
-# Mac and Linux:
+### Mac and Linux:
 source env/bin/activate  
 
-# Windows: 
+### Windows: 
 env\Scripts\activate
 
 ## install dependencies
