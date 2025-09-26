@@ -37,7 +37,7 @@ python manage.py createsuperuser
 
 python manage.py runserver
 
-# app is now reachable with http://127.0.0.1:8000/
+### app is now reachable with http://127.0.0.1:8000/
 
 **Note**  
 > This project is intended exclusively for students of the Developer Akademie.  
