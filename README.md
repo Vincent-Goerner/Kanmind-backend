@@ -12,6 +12,16 @@ Create or choose an empty folder and open it in your preferred code editor or co
 python -m venv env
 source env/Scripts/activate
 
+### Unix / macOS (bash, zsh)
+
+python3 -m venv env
+source env/bin/activate
+
+### Git Bash (on Windows)
+
+python -m venv env
+source env/Scripts/activate
+
 ### 3. Install project dependencies
 
 Make sure your virtual environment is activated, then run:
