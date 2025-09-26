@@ -1,35 +1,16 @@
-# KanMind Frontend Project
+# KanMind Project – Backend Setup
 
-![KanMind Logo](assets/icons/logo_icon.svg)
+## Getting Started
 
-Dieses Projekt ist ein einfaches Frontend, das mit **Vanilla JavaScript** (reines JavaScript ohne Frameworks) erstellt wurde. Es wurde speziell entwickelt, um Schülern der **Developer Akademie** mit Backend-Erfahrung den Einstieg in kleinere Frontend-Anpassungen zu erleichtern.
+### 1. Prepare the project folder
+Create or choose an empty folder and open it in your preferred code editor or command line interface (CLI).
 
----
+### 2. Create and activate a virtual environment
 
-## Voraussetzungen
+#### Windows (Command Prompt)
 
-- Ein funktionierendes Django-Backend (`KanMind`), das **nicht** in diesem Projekt enthalten ist.
-- Visual Studio Code mit der **Live Server**-Erweiterung oder eine ähnliche Möglichkeit, die `index.html` auf oberster Ebene lokal im Browser zu starten.
-
----
-
-## Nutzung
-
-1. Stelle sicher, dass das Backend `KanMind` läuft.
-2. Öffne dieses Projekt in **Visual Studio Code**.
-3. Rechtsklicke auf die Datei `index.html` auf oberster Ebene und wähle **Open with Live Server**, um das Projekt zu starten.
-
----
-
-## Ziel des Projekts
-
-Dieses Frontend wurde bewusst mit **Vanilla JavaScript** erstellt, um die folgenden Ziele zu erreichen:
-
-- **Einfacher Einstieg**: Durch den Verzicht auf Frameworks wie React oder Angular bleibt der Code leicht verständlich und nachvollziehbar auch bei wenig Frontend-Erfahrung.
-- **Lernen durch Anpassung**: Schüler können den Code anpassen, um kleine Änderungen vorzunehmen und Frontend-Konzepte besser zu verstehen.
-- **Backend-Erweiterung**: Das Projekt lässt sich einfach an das bestehende Django-Backend `KanMind` anbinden.
-
----
+python -m venv env
+env\Scripts\activate
 
 ## Hinweis
 
