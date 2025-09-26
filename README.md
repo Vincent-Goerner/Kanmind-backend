@@ -8,14 +8,14 @@ Create or choose an empty folder and open it in your preferred code editor or co
 ### 2. Create and activate a virtual environment
 
 #### Windows (Command Prompt)
-``bash
+
 python -m venv env
-env\Scripts\activate
+source env/Scripts/activate
 
 ### 3. Install project dependencies
 
 Make sure your virtual environment is activated, then run:
-``bash
+
 pip install -r requirements.txt
 
 **Note**  
