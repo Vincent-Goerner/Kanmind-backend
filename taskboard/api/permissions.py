@@ -3,8 +3,12 @@ from taskboard.models import Board, Task, Comment
 from rest_framework.exceptions import NotFound
 
 class IsOwnerOrMember(BasePermission):
-
+    
     def has_permission(self, request, view):
+        """
+        Checks if the user is the board owner or a member; safe methods are always allowed.
+        Raises a 404 error if the board does not exist.
+        """
         user = request.user
         method = request.method
 
@@ -16,7 +20,10 @@ class IsOwnerOrMember(BasePermission):
             return True
         return bool(user == board.owner or user in board.members.all())
     
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj): 
+        """
+        Allows access if the user is the board owner or a member; only the owner can delete the board.
+        """
         board = obj
 
         if request.method == 'DELETE':
@@ -25,8 +32,12 @@ class IsOwnerOrMember(BasePermission):
             return bool(request.user == board.owner or request.user in board.members.all())
         
 class IsBoardMember(BasePermission):
-
+    
     def has_permission(self, request, view):
+        """
+        Checks if the user is a member or owner of the board linked via request data or task.
+        Raises 404 if the board or task is not found.
+        """
         board_id = request.data.get("board")
         if board_id:
             try:
@@ -45,6 +56,9 @@ class IsBoardMember(BasePermission):
         )
     
     def has_object_permission(self, request, view, obj):
+        """
+        Allows access if user is board owner or member; only owner or task creator may delete.
+        """
         task = obj
         try:
             board = task.board
@@ -57,7 +71,12 @@ class IsBoardMember(BasePermission):
         return bool(request.user == board.owner or request.user in board.members.all())
     
 class IsCommentAuthor(BasePermission):
+    
     def has_permission(self, request, view):
+        """
+        Allows access only if the user is the author of the specified comment.
+        Raises 404 if the comment does not exist.
+        """
         try:
             comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
         except Comment.DoesNotExist:
@@ -66,6 +85,9 @@ class IsCommentAuthor(BasePermission):
             return bool(request.user == comment.author)
     
     def has_object_permission(self, request, view, obj):
+        """
+        Allows deletion only if the user is the author of the comment.
+        """
         comment = Comment.objects.get(pk=view.kwargs.get('comment_id'))
         if request.method == "DELETE":
             return bool(request.user == comment.author)

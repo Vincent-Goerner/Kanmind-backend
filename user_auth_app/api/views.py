@@ -12,6 +12,10 @@ class RegistrationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """
+        Validates registration data, creates a new user, and returns a token with user info.
+        Returns 400 with error details if validation fails.
+        """
         serializer = RegistrationSerializer(data=request.data)
         data = {}
 
@@ -33,6 +37,10 @@ class CustomLoginView(ObtainAuthToken):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """
+        Authenticates user via email and password, and returns token with user info.
+        Returns 400 with error message if authentication fails.
+        """
         serializer = LoginTokenSerializer(data=request.data)
         data = {}
 
@@ -55,6 +63,10 @@ class EmailCheckView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """
+        Checks if a user with the given email exists and returns basic user data.
+        Returns 400 if email is missing and 404 if no user is found.
+        """
         check_email = request.query_params.get('email')
 
         if not check_email:

@@ -17,6 +17,10 @@ PRIORITY_SELECTION=(
 )
 
 class Member(models.Model):
+    """
+    Represents a registered user who is a member of the system.
+    Links one-to-one with Django's User model and stores the join date.
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     joined_date = models.DateTimeField(auto_now_add=True)
 
@@ -24,6 +28,10 @@ class Member(models.Model):
         return self.user
 
 class Board(models.Model):
+    """
+    Represents a project board that can have multiple members and tasks.
+    Each board has one owner and can be shared with other users as members.
+    """
     title = models.CharField(max_length=50)
     members = models.ManyToManyField(User, related_name="board_members")
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,6 +40,10 @@ class Board(models.Model):
         return self.title
 
 class Task(models.Model):
+    """
+    Represents a task within a board, including its status, priority, and assignments.
+    Tasks can have assignees, reviewers, due dates, and are linked to a creator.
+    """
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name="tasks")
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=255, blank=True, null=True)
@@ -46,6 +58,10 @@ class Task(models.Model):
         return self.title
 
 class Comment(models.Model):
+    """
+    Represents a comment made on a specific task by a user.
+    Stores content, creation timestamp, and links to both task and author.
+    """
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comment_author")
     content = models.CharField(max_length=255)

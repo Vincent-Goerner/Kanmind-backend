@@ -11,6 +11,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ["id","email","fullname"]
 
     def get_fullname(self, obj:User)->str:
+        """
+        Returns the user's full name by combining username and last_name.
+        Used as a read-only field in the serialized response.
+        """
         fullname = obj.username + " " + obj.last_name
         return fullname
 
@@ -28,11 +32,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
         }
         
     def validate_email(self, value):
+        """
+        Ensures that the provided email is not already in use.
+        Raises a validation error if a duplicate is found.
+        """
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError('Email already exists')
         return value
 
     def save(self):
+        """
+        Parses full name into username and last_name, checks passwords, and creates the user.
+        Raises an error if passwords do not match or other validation fails.
+        """
         fullname = self.validated_data['fullname']
         pw = self.validated_data['password']
         repeated_pw = self.validated_data['repeated_password']
@@ -60,6 +72,10 @@ class LoginTokenSerializer(serializers.Serializer):
     password = serializers.CharField()
 
     def validate(self, payload):
+        """
+        Authenticates the user using email and password.
+        Adds the authenticated user to the validated payload or raises an error on failure.
+        """
         payload_email = payload.get('email')
         payload_password = payload.get('password')
 
