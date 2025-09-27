@@ -24,6 +24,8 @@ env\Scripts\activate
 pip install -r requirements.txt
 
 ## 4. migrate database
+
+python manage.py makemigrations
 python manage.py migrate
 
 ## 5. create superuser
