@@ -13,7 +13,7 @@ class BoardListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     """
-    Returns boards where the user is either the owner or a member, without duplicates.
+    Returns boards where the user is either the owner or a member, without duplicates
     """
     def get_queryset(self):
         user = self.request.user        
