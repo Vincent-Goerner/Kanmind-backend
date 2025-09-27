@@ -1,5 +1,5 @@
 from django.urls import path
-from kanmind.api.views import BoardListView, BoardDetailView, TaskListView, TaskListAssignedView, TaskListReviewingView, TaskDetailView, CommentCreateView, CommentDeleteView
+from taskboard.api.views import BoardListView, BoardDetailView, TaskListView, TaskListAssignedView, TaskListReviewingView, TaskDetailView, CommentCreateView, CommentDeleteView
 
 urlpatterns = [
     path('boards/', BoardListView.as_view(), name='board-list'),

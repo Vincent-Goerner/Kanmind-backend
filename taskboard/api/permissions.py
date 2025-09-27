@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from kanmind.models import Board, Task, Comment
+from taskboard.models import Board, Task, Comment
 from rest_framework.exceptions import NotFound
 
 class IsOwnerOrMember(BasePermission):

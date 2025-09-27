@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class KanmindConfig(AppConfig):
+class taskboardConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'kanmind'
+    name = 'taskboard'

@@ -1,10 +1,11 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from kanmind.models import Board, Task, Comment
-from kanmind.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, CommentSerializer
-from kanmind.api.permissions import IsOwnerOrMember, IsBoardMember, IsCommentAuthor
+from taskboard.models import Board, Task, Comment
+from taskboard.api.serializers import BoardSerializer, BoardDetailSerializer, TaskSerializer, CommentSerializer
+from taskboard.api.permissions import IsOwnerOrMember, IsBoardMember, IsCommentAuthor
 from django.shortcuts import get_object_or_404
+
 
 class BoardListView(generics.ListCreateAPIView):
     queryset = Board.objects.all()
@@ -12,7 +13,7 @@ class BoardListView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
+        user = self.request.user        
         boards = Board.objects.filter(members=user) | Board.objects.filter(owner=user)
 
         return boards.distinct()
@@ -22,6 +23,18 @@ class BoardListView(generics.ListCreateAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        member_ids = request.data.get('members', [])
+
+        if not isinstance(member_ids, list):
+            return Response({"error": "Members must be a list of user IDs."}, status=status.HTTP_400_BAD_REQUEST)
+
+        for member_id in member_ids:
+            if not isinstance(member_id, int) and not str(member_id).isdigit():
+                return Response({"error": "User dont exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return super().create(request, *args, **kwargs)
 
 class BoardDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
