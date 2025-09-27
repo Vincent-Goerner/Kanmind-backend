@@ -49,7 +49,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
 
         if pw != repeated_pw:
-            raise serializers.ValidationError({'error': 'passwords dont match'})
+            raise serializers.ValidationError({'error': 'Passwords dont match'})
         
         account.set_password(pw)
         account.save()

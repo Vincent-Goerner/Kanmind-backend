@@ -20,7 +20,7 @@ class MembersField(serializers.Field):
                 user = User.objects.get(pk=pk)
                 users.append(user)
             except User.DoesNotExist:
-                raise serializers.ValidationError(f"User dont exist")
+                raise serializers.ValidationError("User dont exist")
         return users
 
 class BoardSerializer(serializers.ModelSerializer):
