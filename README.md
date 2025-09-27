@@ -11,7 +11,7 @@ cd Kanmind-backend
 
 ## 2. create and activate venv
 
-python3 -m venv env
+python -m venv env
 
 ### Mac and Linux:
 source env/bin/activate  
