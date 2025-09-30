@@ -3,7 +3,11 @@ from taskboard.models import Board, Task, Comment
 from rest_framework.exceptions import NotFound
 
 class IsOwnerOrMember(BasePermission):
-    
+    """
+    Permission class that grants access to board owners and members.
+    Safe methods are allowed for all; only the owner can delete the board.
+    Raises 404 if the board does not exist.
+    """
     def has_permission(self, request, view):
         """
         Checks if the user is the board owner or a member; safe methods are always allowed.
@@ -32,7 +36,10 @@ class IsOwnerOrMember(BasePermission):
             return bool(request.user == board.owner or request.user in board.members.all())
         
 class IsBoardMember(BasePermission):
-    
+    """
+    Permission class that allows access to board owners and members via board or task relation.
+    Only the board owner or task creator can delete; raises 404 if board or task is missing.
+    """
     def has_permission(self, request, view):
         """
         Checks if the user is a member or owner of the board linked via request data or task.
@@ -71,7 +78,10 @@ class IsBoardMember(BasePermission):
         return bool(request.user == board.owner or request.user in board.members.all())
     
 class IsCommentAuthor(BasePermission):
-    
+    """
+    Permission class that allows access only to the author of a comment.
+    Raises 404 if the comment does not exist; only authors may delete their comments.
+    """
     def has_permission(self, request, view):
         """
         Allows access only if the user is the author of the specified comment.

@@ -4,6 +4,10 @@ from django.contrib.auth import authenticate
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User model including a computed full name field.
+    Combines username and last_name to provide a full name in the API response.
+    """
     fullname = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,6 +23,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return fullname
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration handling full name parsing and password validation.
+    Ensures email uniqueness and matching passwords before creating a new user.
+    """
     fullname = serializers.CharField(write_only=True)
     repeated_password = serializers.CharField(write_only=True)
 
@@ -68,6 +76,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return account
     
 class LoginTokenSerializer(serializers.Serializer):
+    """
+    Serializer to validate user credentials and authenticate by email and password.
+    Adds authenticated user to validated data or raises validation error on failure.
+    """
     email = serializers.EmailField()
     password = serializers.CharField()
 

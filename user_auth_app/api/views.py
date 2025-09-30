@@ -9,6 +9,10 @@ from .serializers import RegistrationSerializer, LoginTokenSerializer, UserProfi
 
 
 class RegistrationView(APIView):
+    """
+    APIView to handle user registration by validating input and creating a new user.
+    Returns auth token and user info on success, or 400 error with validation details.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -34,6 +38,10 @@ class RegistrationView(APIView):
         return Response(data)
     
 class CustomLoginView(ObtainAuthToken):
+    """
+    APIView to authenticate users by email and password, returning an auth token and user info.
+    Handles validation errors with detailed 400 responses.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -60,6 +68,10 @@ class CustomLoginView(ObtainAuthToken):
 
 
 class EmailCheckView(APIView):
+    """
+    APIView to verify existence of a user by email and return basic user info.
+    Requires authentication and handles missing or not found email cases with appropriate errors.
+    """ 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

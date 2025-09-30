@@ -13,7 +13,10 @@ def get_full_username(user):
     return f'{user.username} {user.last_name}'.strip()
 
 class MembersField(serializers.Field):
-    
+    """
+    Custom serializer field for handling board members as user ID lists.
+    Serializes with UserProfileSerializer and validates user existence on input.
+    """
     def to_representation(self, value:User):
         """
         Serializes a queryset of users using UserProfileSerializer.
@@ -36,6 +39,10 @@ class MembersField(serializers.Field):
         return users
 
 class BoardSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Board model including custom fields for member/task statistics.
+    Handles board creation with the current user as owner and assigns provided members.
+    """
     member_count = serializers.SerializerMethodField()
     ticket_count = serializers.SerializerMethodField()
     tasks_to_do_count = serializers.SerializerMethodField()
@@ -87,6 +94,10 @@ class BoardSerializer(serializers.ModelSerializer):
         return board
     
 class TaskSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Task model with custom fields for assignee, reviewer, and comment count.
+    Automatically sets the authenticated user as the task creator on creation.
+    """
     comments_count = serializers.SerializerMethodField()
     assignee = UserProfileSerializer(read_only=True)
     reviewer = UserProfileSerializer(read_only=True)
@@ -126,6 +137,10 @@ class TaskSerializer(serializers.ModelSerializer):
         return task
     
 class BoardDetailSerializer(BoardSerializer):
+    """
+    Extends BoardSerializer to include related tasks and dynamic user representation.
+    Returns detailed user data in PATCH requests; otherwise uses standard serialized output.
+    """
     tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
@@ -150,6 +165,10 @@ class BoardDetailSerializer(BoardSerializer):
         return rep
     
 class CommentSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Comment model with a custom field for author representation.
+    Displays the author's full username using a utility function.
+    """
     author = serializers.SerializerMethodField()
 
     class Meta:
